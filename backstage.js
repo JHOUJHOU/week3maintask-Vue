@@ -36,8 +36,9 @@ const app = createApp({
                 productModal.show();
                 this.isNew = false;
             } else if(status === 'delete'){
-                delProductModal.show();
                 this.tempProduct =  { ...product };
+                delProductModal.show();
+
             }
                 
         },
@@ -97,7 +98,6 @@ const app = createApp({
                 delProductModal.hide();
                 // 新增完要重新渲染畫面
                 this.getProduct();
-                
             })
             .catch(err => {
                 console.dir(err);
