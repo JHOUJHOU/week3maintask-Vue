@@ -21,21 +21,23 @@ const app = createApp({
     },
     methods: {
         openModal(status, product) {
-            // 新增產品開啟Modal視窗
+            // 根據點擊的狀態，判斷新增或編輯或刪除
             console.log(status, product);
             if(status === 'isNew'){
+                // 新增將資料清空
                 this.tempProduct = {
                     imagesUrl:[],
                 }
                 productModal.show();
                 this.isNew = true;
             } else if(status === 'edit'){
+                // 這裡要使用淺層拷貝，才不會變更到原有資料
                 this.tempProduct =  { ...product };
                 productModal.show();
                 this.isNew = false;
             } else if(status === 'delete'){
-                this.tempProduct =  { ...product };
                 delProductModal.show();
+                this.tempProduct =  { ...product };
             }
                 
         },
@@ -75,7 +77,7 @@ const app = createApp({
             }
             axios[method](apiUrl,{ data: this.tempProduct })
             .then(res => {
-                console.log(this.tempProduct);
+                // console.log(this.tempProduct);
                 // 新增完要重新渲染畫面
                 this.getProduct();
                 // Modal視窗新增完後關閉
@@ -86,7 +88,20 @@ const app = createApp({
             })
         },
         delProduct() {
+            let apiUrl = `${url}/api/${api_path}/admin/product/${this.tempProduct.id}`;
 
+            axios.delete(apiUrl)
+            .then(res => {
+                // console.log(this.tempProduct);
+                // Modal視窗新增完後關閉
+                delProductModal.hide();
+                // 新增完要重新渲染畫面
+                this.getProduct();
+                
+            })
+            .catch(err => {
+                console.dir(err);
+            })
         }
     },
     mounted() {
